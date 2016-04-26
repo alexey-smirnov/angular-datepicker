@@ -163,6 +163,7 @@
           , isMouseOnInput = false
           , preventMobile = typeof attr.datepickerMobile !== 'undefined' && attr.datepickerMobile !== 'false'
           , datetime = $locale.DATETIME_FORMATS
+          , firstDay = $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK
           , pageDatepickers
           , hours24h = 86400000
           , htmlTemplate = generateHtmlTemplate(prevButton, nextButton, preventMobile)
