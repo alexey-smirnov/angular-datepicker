@@ -157,6 +157,7 @@
           //, dateMinLimit
           //, dateMaxLimit
           , dateDisabledDates = $scope.$eval($scope.dateDisabledDates)
+          , isEnabledDate = $scope.isEnabledDate
           , date = new Date()
           , dateString
           , isMouseOn = false
@@ -758,6 +759,12 @@
                 return false;
               }
             }
+          } else if (isEnabledDate) {
+
+            if (!isEnabledDate(year, monthNumber, day)) {
+            
+              return false;
+            }
           }
           return true;
         };
@@ -960,6 +967,7 @@
           'buttonNextTitle': '@',
           'buttonPrevTitle': '@',
           'dateDisabledDates': '@',
+          'isEnabledDate': '=',
           'dateSetHidden': '@',
           'dateTyper': '@',
           'dateWeekStartDay': '@',
