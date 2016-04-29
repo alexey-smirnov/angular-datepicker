@@ -141,9 +141,14 @@
 
       return toReturn.join('');
     }
-    , datepickerDirective = function datepickerDirective($window, $compile, $locale, $filter, $interpolate, $timeout) {
+    , datepickerDirective = function datepickerDirective($window, $compile, $locale, $filter, $interpolate, $timeout, $rootScope) {
 
       var linkingFunction = function linkingFunction($scope, element, attr) {
+        $scope.$on('$refreshDatepickers', function(e) {
+          unregisterListener();
+          angular.element(theCalendar).remove();
+          linkingFunction($scope, element, attr);
+        });
 
         //get child input
         var selector = attr.selector
@@ -759,10 +764,10 @@
                 return false;
               }
             }
-          } else if (isEnabledDate) {
+          } else if ($scope.isEnabledDate) {
 
-            if (!isEnabledDate(year, monthNumber, day)) {
-            
+            if (!$scope.isEnabledDate(year, monthNumber, day)) {
+
               return false;
             }
           }
@@ -944,7 +949,7 @@
         setDaysInMonth($scope.monthNumber, $scope.year);
         $scope.checkVisibility = checkVisibility;
 
-        $scope.$on('$destroy', function unregisterListener() {
+        function unregisterListener() {
 
           unregisterDataSetWatcher();
           unregisterDateMinLimitWatcher();
@@ -953,7 +958,9 @@
           thisInput.off('focus click focusout blur');
           angular.element(theCalendar).off('mouseenter mouseleave focusin');
           angular.element($window).off('click focus focusin', onClickOnWindow);
-        });
+        }
+
+        $scope.$on('$destroy', unregisterListener);
       };
 
       return {
@@ -981,5 +988,5 @@
     };
 
   angular.module('720kb.datepicker', [])
-               .directive('datepicker', ['$window', '$compile', '$locale', '$filter', '$interpolate', '$timeout', datepickerDirective]);
+               .directive('datepicker', ['$window', '$compile', '$locale', '$filter', '$interpolate', '$rootScope', '$timeout', datepickerDirective]);
 }(angular, navigator));
