@@ -143,12 +143,19 @@
     }
     , datepickerDirective = function datepickerDirective($window, $compile, $locale, $filter, $interpolate, $timeout, $rootScope) {
 
+      var unregister = null;
       var linkingFunction = function linkingFunction($scope, element, attr) {
-        $scope.$on('$refreshDatepickers', function(e) {
+        var reset = function reset() {
           unregisterListener();
           angular.element(theCalendar).remove();
           linkingFunction($scope, element, attr);
-        });
+        }
+
+        if(unregister) {
+          unregister();
+        }
+
+        unregister = $scope.$on('$refreshDatepickers', reset);
 
         //get child input
         var selector = attr.selector
@@ -751,6 +758,11 @@
           $scope.paginationYears = theNewYears;
         };
 
+        $scope.checkDatesEqual = function checkDatesEqual(d1, d2)
+        {
+          return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+        };
+
         $scope.isSelectableDate = function isSelectableDate(monthNumber, year, day) {
           var i = 0;
 
@@ -759,7 +771,7 @@
 
             for (i; i <= dateDisabledDates.length; i += 1) {
 
-              if (new Date(dateDisabledDates[i]).getTime() === new Date(monthNumber + '/' + day + '/' + year).getTime()) {
+              if ($scope.checkDatesEqual(new Date(dateDisabledDates[i]), new Date(monthNumber + '/' + day + '/' + year))) {
 
                 return false;
               }

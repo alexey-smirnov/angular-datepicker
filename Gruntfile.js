@@ -20,21 +20,17 @@
       , cssmin = require('./tasks/cssmin')(banner, grunt)
       , connect = require('./tasks/connect')(grunt)
       , watch = require('./tasks/watch')(grunt)
-      , concurrent = require('./tasks/concurrent')(grunt)
-      , copy = require('./tasks/copy')(grunt);
+      , concurrent = require('./tasks/concurrent')(grunt);
 
     grunt.initConfig({
       'pkg': grunt.file.readJSON('package.json'),
       'confs': confs,
-      'jscs': jscs,
       'csslint': csslint,
-      'eslint': eslint,
       'uglify': uglify,
       'cssmin': cssmin,
       'connect': connect,
       'watch': watch,
-      'concurrent': concurrent,
-	  'copy': copy
+      'concurrent': concurrent
     });
 
     grunt.registerTask('default', [
@@ -49,8 +45,6 @@
     ]);
 
     grunt.registerTask('prod', [
-      'lint',
-	  'copy:non-minified',
       'cssmin',
       'uglify'
     ]);
