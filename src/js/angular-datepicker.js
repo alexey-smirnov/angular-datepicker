@@ -1000,5 +1000,5 @@
     };
 
   angular.module('720kb.datepicker', [])
-               .directive('datepicker', ['$window', '$compile', '$locale', '$filter', '$interpolate', '$rootScope', '$timeout', datepickerDirective]);
+               .directive('datepicker', ['$window', '$compile', '$locale', '$filter', '$interpolate', '$timeout', '$rootScope', datepickerDirective]);
 }(angular, navigator));
